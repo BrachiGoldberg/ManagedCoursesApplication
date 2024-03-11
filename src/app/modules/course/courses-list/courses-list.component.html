@@ -1,0 +1,11 @@
+<p>courses-list works!</p>
+
+<div>
+    @for(course of courses; track $index){
+    <app-course-details [course]="course"></app-course-details>
+    }
+
+    @if(isLecturer){
+    <button (click)="addCourse()">Add new course</button>
+    }
+</div>

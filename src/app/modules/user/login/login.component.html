@@ -1,0 +1,21 @@
+<p>login page</p>
+
+<form #loginForm="ngForm">
+
+    <div>
+        <label for="name">UserName</label>
+        <input id="name" [(ngModel)]="name" name="name" type="text" />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input id="password" [(ngModel)]="password" name="password" type="text" />
+    </div>
+    @if(isLecturerEnter){<div>
+        <label for="course">Course name</label>
+        <input id="course" [(ngModel)]="courseName" name="courseName" type="text" />
+    </div>}
+
+    <button (click)="login()">Login</button>
+</form>
+
+<button (click)="goToRegister()">Do you not have an account? please register here</button>

@@ -1,0 +1,31 @@
+<p>register works!</p>
+
+<a routerLink="../login">Do you already have an account?</a>
+
+<form #registerForm="ngForm">
+
+<div>
+    <label for="identity">Identity</label>
+    <input id="identity" type="text" [(ngModel)]="user.identity" name="identity"/>
+</div>
+
+<div>
+    <label for="name">UserName</label>
+    <input id="name" type="text" [(ngModel)]="user.name" name="name" [value]="user.name"/>
+</div>
+
+<div>
+    <label for="address">Address</label>
+    <input id="address" type="text" [(ngModel)]="user.address" name="address"/>
+</div>
+
+<div>
+    <label for="email">Email</label>
+    <input id="email" type="text" [(ngModel)]="user.email" name="email"/>
+</div>
+<div>
+    <label for="password">Password</label>
+    <input id="password" type="text" [(ngModel)]="user.password" name="password"/>
+</div>
+<button (click)="register()">Register</button>
+</form>

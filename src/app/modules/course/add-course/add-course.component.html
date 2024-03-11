@@ -1,0 +1,44 @@
+<p>add-course works!</p>
+
+<form [formGroup]="courseForm">
+
+    <div>
+        <label for="name">Course name</label>
+        <input id="name" type="text" formControlName="name" />
+    </div>
+    <div>
+        <select formControlName="categoryId">
+            @for (category of categories; track $index) {
+            <option [value]="category.id">{{category.name}}</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="duration">Course Duration</label>
+        <input id="duration" type="number" formControlName="duration" />
+    </div>
+    <div>
+        <label for="image">Image</label>
+        <input id="image" type="text" formControlName="image" />
+    </div>
+    <div>
+        <label for="learningWay">Learning way</label>
+        <input id="learningWay" type="radio" value="0" selected formControlName="learningWay" />Frontal
+        <input id="learningWay" type="radio" value="1" formControlName="learningWay" />Zoom
+    </div>
+    <div>
+        <label for="startDate">Start date </label>
+        <input id="startDate" type="date" formControlName="startDate" />
+    </div>
+
+    <div formArrayName="syllabus">
+        @for ( syllabus of syllabusArray.controls; track $index) {
+        <div>
+            <input type="text" (blur)="checkIsFullField($index)" [formControl]="getSyllabusControl($index)" />
+        </div>
+        }
+        <button type="button" (click)="addSyllabus()">Add Syllabus Detail</button>
+    </div>
+
+    <button (click)="submitForm()">Submit</button>
+</form>

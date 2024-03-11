@@ -1,0 +1,12 @@
+
+<div>
+    <div>path image is {{course.image}}</div>
+    <h3>{{course.name}} by {{lecturerName}}</h3>
+    <div>{{learningWay}}</div>
+    <div>Duration Course is {{course.duration}} lessons</div>
+    @if(isLecturer && course.lecturerId == userId){
+    <div>
+        <button (click)="updateCourse()">Update</button>
+        <button (click)="deleteCourse()">Delete</button>
+    </div>}
+</div>
