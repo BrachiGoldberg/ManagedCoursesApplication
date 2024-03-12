@@ -1,12 +1,19 @@
-
 <div>
-    <div>path image is {{course.image}}</div>
-    <h3>{{course.name}} by {{lecturerName}}</h3>
-    <div>{{learningWay}}</div>
-    <div>Duration Course is {{course.duration}} lessons</div>
-    @if(isLecturer && course.lecturerId == userId){
-    <div>
-        <button (click)="updateCourse()">Update</button>
-        <button (click)="deleteCourse()">Delete</button>
-    </div>}
+    work
+    <h4>{{course?.name}}</h4>
+    <div>{{category?.name}} {{category?.iconPath}}</div>
+    <img alt="{{course?.name}}" src="{{course?.image}}" class="image" />
+    <div [ngClass]="{'close': isClose()}">{{course?.startDate}}</div>
+    <ul>
+        <div>Syllabus</div>
+        @for(item of course?.syllabus; track $index){
+        <li>{{item}}</li>
+        }
+    </ul>
+
+    @if(course?.lecturerId == userId){
+        <div>
+            <button (click)="updateCourse()">Update</button>
+            <button (click)="deleteCourse()">Delete</button>
+        </div>}
 </div>

@@ -1,8 +1,13 @@
-<h1>Welcome to our website</h1>
-<div>
+<!-- <h1>Welcome to our website</h1> -->
+<!-- <div>
   <a routerLink="/user">user login</a>
 </div>
 <div>
   <a routerLink="user/lecturer-login">Do you a lecturer? please enter here</a>
-</div>
+</div> -->
+<!-- <app-home></app-home> -->
+<router-outlet>
+  <app-header></app-header>
 <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</router-outlet>

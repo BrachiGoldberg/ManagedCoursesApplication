@@ -13,7 +13,7 @@ import { CATEGORIES, Category } from '../category.model';
 export class AddCourseComponent {
 
   courseId: number | undefined;
-  course: Course | undefined;
+  course!: Course ;
   categories: Category[] = CATEGORIES;
   userId!: number;
   courseForm!: FormGroup;
@@ -21,7 +21,7 @@ export class AddCourseComponent {
     private _fb: FormBuilder, private _router: Router) { }
 
   ngOnInit() {
-    let userId = localStorage.getItem('user');
+    let userId = sessionStorage.getItem('user');
     if (userId != undefined)
       this.userId = +userId;
     else {
@@ -36,7 +36,7 @@ export class AddCourseComponent {
     })
     if (this.courseId != undefined) {
       let myCourse = this._serivice.getCourseById(this.courseId);
-      this.course = myCourse![0];
+      this.course = myCourse!;
     }
     else {
       this.course = new Course();
@@ -105,4 +105,8 @@ export class AddCourseComponent {
     else alert("you have missing fields");
   }
 
+  cancel(){
+    alert("your details aren't saved, Do you sure?");
+    this._router.navigate(['courses']);
+  }
 }

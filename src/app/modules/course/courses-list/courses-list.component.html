@@ -1,8 +1,44 @@
-<p>courses-list works!</p>
+<form #filterForm="ngForm">
+    <div id="firstFilter">
+        <label for="name">Filter by name {{nameFilter}}</label>
+        <input id="name" type="text" [(ngModel)]="nameFilter" name="name" (input)="filter()" />
+    </div>
+    <div id="secondFilter">
+        <label for="category">Filter by categoryId</label>
+        <select id="category" [(ngModel)]="categoryIdFilter" name="category" (change)="filter()">
+            @for (category of categories; track $index) {
+            <option [value]="category.id">{{category.name}}</option>
+            }
+        </select>
+    </div>
+    <div id="thirdFilter">
+        <label for="learningWay">Filter by name</label>
+        <input id="learningWay" type="radio" value="0" [(ngModel)]="learningWayFilter" name="learningWay"
+            (click)="filter()" />Frontal
+        <input id="learningWay" type="radio" value="1" [(ngModel)]="learningWayFilter" name="learningWay"
+            (click)="filter()" />Zoom
+    </div>
+    <button (click)="canelFilter()">Cancel</button>
+</form>
+
 
 <div>
-    @for(course of courses; track $index){
-    <app-course-details [course]="course"></app-course-details>
+    @for(course of coursesToDisplay; track $index){
+    <!-- <app-course-details [course]="course"></app-course-details> -->
+    <div>
+        <div>
+            <img src="{{course.image}}" class="image" />
+        </div>
+        <h3>{{course.name}} by {{getLecturerName(course.lecturerId!)}}</h3>
+        <div>{{getLearningWay(course.learningWay!)}}</div>
+        <div>Duration Course is {{course.duration}} lessons</div>
+        @if(isLecturer && course.lecturerId == userId){
+        <div>
+            <button (click)="updateCourse(course.id!)">Update</button>
+            <button (click)="deleteCourse(course.id!)">Delete</button>
+        </div>}
+        <button (click)="showDetails(course.id!)">for more details</button>
+    </div>
     }
 
     @if(isLecturer){

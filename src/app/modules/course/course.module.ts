@@ -5,7 +5,7 @@ import { CoursesListComponent } from './courses-list/courses-list.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { AddCourseComponent } from './add-course/add-course.component';
 import { CourseService } from './course.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -14,7 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     CourseRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [CourseService]
 })

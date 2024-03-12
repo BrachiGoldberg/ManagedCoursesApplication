@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { COURSES, Course } from './course.model';
+import { CATEGORIES, Category } from './category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ export class CourseService {
   constructor() { }
   getCourseById(id: number | undefined) {
     if (id != undefined)
-      return COURSES.filter(c => c.id == id);
-    return null;
+      return COURSES.filter(c => c.id == id)[0];
+    return undefined;
   }
 
   addNewCourse(newCourse: Course | undefined) {
@@ -31,7 +32,7 @@ export class CourseService {
     console.log("I update this course: ", myCourse);
   }
 
-  
+
   deleteCourse(id: number | undefined) {
     if (id != undefined) {
       const myCourse = COURSES.findIndex(c => c.id == id);
@@ -41,5 +42,15 @@ export class CourseService {
       }
     }
     return false;
+  }
+
+  getCategory(id: number | undefined) {
+
+    if (id != undefined) {
+      const category = CATEGORIES.find(c => c.id == id);
+      if (category != undefined)
+        return category;
+    }
+    return undefined;
   }
 }
