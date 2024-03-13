@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-logout',
@@ -9,10 +10,26 @@ import { Router } from '@angular/router';
 export class LogoutComponent {
 
   constructor(private _router: Router) { }
-  
+
   ngOnInit() {
-    alert("Do you want leave the website?");
-    this._router.navigate(['']);
+    Swal.fire({
+      title: "Are you sure you want to leave the site?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, I want"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Have a good day!",
+          icon: "success"
+        }).then(() =>
+          this._router.navigate([''])
+        );
+      }
+    });
   }
 
   ngOnDestroy() {
