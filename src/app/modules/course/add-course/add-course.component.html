@@ -1,49 +1,3 @@
-<!-- 
-<form [formGroup]="courseForm">
-
-    <div>
-        <label for="name">Course name</label>
-        <input id="name" type="text" formControlName="name" />
-    </div>
-    <div>
-        <select formControlName="categoryId">
-            @for (category of categories; track $index) {
-            <option [value]="category.id?.toString()">{{category.name}}</option>
-            }
-        </select>
-    </div>
-    <div>
-        <label for="duration">Course Duration</label>
-        <input id="duration" type="number" formControlName="duration" />
-    </div>
-    <div>
-        <label for="image">Image</label>
-        <input id="image" type="text" formControlName="image" />
-    </div>
-    <div>
-        <label for="learningWay">Learning way</label>
-        <input id="learningWay" type="radio" value="0" selected formControlName="learningWay" />Frontal
-        <input id="learningWay" type="radio" value="1" formControlName="learningWay" />Zoom
-    </div>
-    <div>
-        <label for="startDate">Start date </label>
-        <input id="startDate" type="date" formControlName="startDate" />
-    </div>
-
-    <div formArrayName="syllabus">
-        @for ( syllabus of syllabusArray.controls; track $index) {
-        <div>
-            <input type="text" (blur)="checkIsFullField($index)" [formControl]="getSyllabusControl($index)" />
-        </div>
-        }
-        <button type="button" (click)="addSyllabus()">Add Syllabus Detail</button>
-    </div>
-
-    <button (click)="submitForm()">Save</button>
-</form>
-
-<button (click)="cancel()">Cancel</button> -->
-
 <form [formGroup]="courseForm" class="course-form">
 
     <div class="form-group">
@@ -58,6 +12,10 @@
             <option [value]="category.id?.toString()">{{category.name}}</option>
             }
         </select>
+    </div>
+
+    <div>
+        <button mat-raised-button color="primary" (click)="addNewCategory()"> Add new Category</button>
     </div>
 
     <div class="form-group">
@@ -88,7 +46,8 @@
         @for(syllabusControl of syllabusArray.controls; track $index){
         <div class="form-group">
             <label for="syllabus"> {{ $index + 1 }} </label>
-            <input type="text" [formControl]="getSyllabusControl($index)" matInput (change)="checkIsFullField($index)" />
+            <input type="text" [formControl]="getSyllabusControl($index)" matInput
+                (change)="checkIsFullField($index)" />
         </div>}
         <button type="button" mat-button color="primary" (click)="addSyllabus()">Add Syllabus Detail</button>
     </div>

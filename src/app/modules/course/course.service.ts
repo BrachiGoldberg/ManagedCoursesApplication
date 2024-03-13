@@ -46,4 +46,9 @@ export class CourseService {
   getCategory(id: number | undefined): Observable<Category> {
     return this._http.get<Category>(`${this.baseApi}/categories/${id}`);
   }
+
+  addNewCategory(category: Category): Observable<Category> {
+    console.log("new category in service", category);
+    return this._http.post<Category>(`${this.baseApi}/categories`, category);
+  }
 }

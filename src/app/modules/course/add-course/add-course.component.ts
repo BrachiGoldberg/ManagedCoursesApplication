@@ -54,11 +54,15 @@ export class AddCourseComponent {
       this.course?.syllabus?.forEach(s => this.syllabusArray.push(this._fb.control(s)));
     }
 
+    this.getAllCategories();
+  }
+
+  getAllCategories() {
     this._serivice.getAllCategories().subscribe(data => {
       this.categories = data;
     }, error => {
       this._router.navigate(['error']);
-    })
+    });
   }
 
   get syllabusArray(): FormArray {
@@ -164,6 +168,54 @@ export class AddCourseComponent {
         this._router.navigate(['courses']);
       }
     });
+  }
+
+  addNewCategory() {
+    let icon: string, name: string;
+    const value1 = Swal.fire({
+      title: "Enter your category",
+      input: "text",
+      inputLabel: "New Category",
+      showCancelButton: true,
+      showConfirmButton: true,
+      inputValidator: value => {
+        console.log(value);
+      }
+
+
+
+    }).then(value => {
+      console.log(value.value);
+      if (value.value != undefined) {
+        name = value.value;
+        Swal.fire({
+          title: "Enter Icon to the category",
+          input: "text",
+          inputLabel: "Icon Path",
+          showCancelButton: true,
+          showConfirmButton: true,
+          inputValidator: value => {
+            console.log(value);
+          }
+        }).then(value1 => {
+          if (value1.value != undefined) {
+            console.log(value1.value, name)
+            icon = value1.value;
+          }
+        }).then(() => {
+          const newCategory: Category = { iconPath: icon, id: 0, name: name }
+          this._serivice.addNewCategory(newCategory).subscribe(data => {
+            this.getAllCategories();
+          }, error=>this._router.navigate(['error']));
+        });
+      }
+
+    });
+
+
+    // const newCategory: Category = { name: name, id: 0, iconPath: icon }
+    // this._serivice.addNewCategory(newCategory);
+
   }
 
 }
