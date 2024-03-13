@@ -1,31 +1,69 @@
-<p>register works!</p>
+<!-- <form #registerForm="ngForm">
 
-<a routerLink="../login">Do you already have an account?</a>
+    <div>
+        <label for="identity">Identity</label>
+        <input id="identity" type="text" [(ngModel)]="user.identity" name="identity" />
+    </div>
+
+    <div>
+        <label for="name">UserName</label>
+        <input id="name" type="text" [(ngModel)]="user.name" name="name" [value]="user.name" />
+    </div>
+
+    <div>
+        <label for="address">Address</label>
+        <input id="address" type="text" [(ngModel)]="user.address" name="address" />
+    </div>
+
+    <div>
+        <label for="email">Email</label>
+        <input id="email" type="text" [(ngModel)]="user.email" name="email" />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input id="password" type="text" [(ngModel)]="user.password" name="password" />
+    </div>
+    <button (click)="register()">Register</button>
+</form>
+<a routerLink="../login">Do you already have an account?</a> -->
 
 <form #registerForm="ngForm">
-
-<div>
-    <label for="identity">Identity</label>
-    <input id="identity" type="text" [(ngModel)]="user.identity" name="identity"/>
-</div>
-
-<div>
-    <label for="name">UserName</label>
-    <input id="name" type="text" [(ngModel)]="user.name" name="name" [value]="user.name"/>
-</div>
-
-<div>
-    <label for="address">Address</label>
-    <input id="address" type="text" [(ngModel)]="user.address" name="address"/>
-</div>
-
-<div>
-    <label for="email">Email</label>
-    <input id="email" type="text" [(ngModel)]="user.email" name="email"/>
-</div>
-<div>
-    <label for="password">Password</label>
-    <input id="password" type="text" [(ngModel)]="user.password" name="password"/>
-</div>
-<button (click)="register()">Register</button>
-</form>
+    <div>
+      <mat-form-field>
+        <mat-label for="identity">Identity</mat-label>
+        <input matInput type="text" [(ngModel)]="user.identity" name="identity" id="identity" required />
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field>
+        <mat-label for="name">Username</mat-label>
+        <input matInput type="text" [(ngModel)]="user.name" name="name" id="name" required />
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field>
+        <mat-label for="address">Address</mat-label>
+        <input matInput type="text" [(ngModel)]="user.address" name="address" id="address" required />
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field>
+        <mat-label for="email">Email</mat-label>
+        <input matInput type="email" [(ngModel)]="user.email" name="email" id="email" required />
+      </mat-form-field>
+    </div>
+  
+    <div>
+      <mat-form-field>
+        <mat-label for="password">Password</mat-label>
+        <input matInput type="password" [(ngModel)]="user.password" name="password" id="password" required />
+      </mat-form-field>
+    </div>
+  
+    <button mat-raised-button color="primary" (click)="register()">Register</button>
+  </form>
+  
+  <a mat-button color="accent" routerLink="../login">Already have an account? Login here</a>

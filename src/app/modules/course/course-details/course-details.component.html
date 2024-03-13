@@ -1,19 +1,19 @@
-<div>
-    work
-    <h4>{{course?.name}}</h4>
-    <div>{{category?.name}} {{category?.iconPath}}</div>
-    <img alt="{{course?.name}}" src="{{course?.image}}" class="image" />
-    <div [ngClass]="{'close': isClose()}">{{course?.startDate}}</div>
-    <ul>
-        <div>Syllabus</div>
-        @for(item of course?.syllabus; track $index){
-        <li>{{item}}</li>
-        }
-    </ul>
 
-    @if(course?.lecturerId == userId){
-        <div>
-            <button (click)="updateCourse()">Update</button>
-            <button (click)="deleteCourse()">Delete</button>
-        </div>}
-</div>
+
+<div class="course-details">
+    <h4>{{ course?.name }} by {{ lecturerName }} | {{ course?.learningWay! | showLearningWayIcon }} {{course?.learningWay! | learningWayString }}</h4>
+    <div>{{ category?.name }} <mat-icon>{{ category?.iconPath }}</mat-icon></div>
+    <img alt="{{ course?.name }}" src="{{ course?.image }}" class="image" />
+    <div [ngClass]="{'close': isClose()}">{{ course?.startDate | date: 'medium' }}</div>
+  
+    <ul class="syllabus-list">
+      <li class="syllabus-item" *ngFor="let item of course?.syllabus; let i = index">
+        {{ item }}
+      </li>
+    </ul>
+  
+    <div *ngIf="course?.lecturerId === userId" class="actions">
+      <button mat-raised-button color="primary" (click)="updateCourse()">Update</button>
+      <button mat-raised-button color="warn" (click)="deleteCourse()">Delete</button>
+    </div>
+  </div>

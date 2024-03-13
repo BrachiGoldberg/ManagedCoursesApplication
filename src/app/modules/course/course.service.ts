@@ -1,56 +1,49 @@
 import { Injectable } from '@angular/core';
-import { COURSES, Course } from './course.model';
-import { CATEGORIES, Category } from './category.model';
+import { Course } from './course.model';
+import { Category } from './category.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
 
-  constructor() { }
-  getCourseById(id: number | undefined) {
-    if (id != undefined)
-      return COURSES.filter(c => c.id == id)[0];
-    return undefined;
+  baseApi: string = 'https://localhost:7218';
+
+  constructor(private _http: HttpClient) { }
+
+  getAllCourses(): Observable<Course[]> {
+    return this._http.get<Course[]>(`${this.baseApi}/courses/all-courses`);
+  }
+
+  getCourseById(id: number | undefined): Observable<Course> {
+    return this._http.get<Course>(`${this.baseApi}/courses/${id}`);
+  }
+
+  getLecturerName(id: number): Observable<string> {
+    return this._http.get<string>(`${this.baseApi}/lecturer/${id}`);
   }
 
   addNewCourse(newCourse: Course | undefined) {
-    if (newCourse != undefined)
-      console.log("I added this course to the list, thank you", newCourse);
+    return this._http.post<Course>(`${this.baseApi}/courses/add-course`, newCourse);
   }
 
-  updateCourse(courseId: number | undefined, course: Course | undefined) {
-    let myCourse = COURSES.find(c => c.id == courseId);
-    if (myCourse != undefined) {
-      myCourse.categoryId = course?.categoryId;
-      myCourse.name = course?.name;
-      myCourse.duration = course?.duration;
-      myCourse.image = course?.image;
-      myCourse.startDate = course?.startDate;
-      myCourse.syllabus = course?.syllabus;
-    }
-    console.log("I update this course: ", myCourse);
+  updateCourse(courseId: number | undefined, course: Course | undefined): Observable<Course> {
+    return this._http.put<Course>(`${this.baseApi}/courses/course/${courseId}`, course);
   }
 
 
-  deleteCourse(id: number | undefined) {
-    if (id != undefined) {
-      const myCourse = COURSES.findIndex(c => c.id == id);
-      if (myCourse != undefined) {
-        COURSES.splice(myCourse, 1);
-        return true;
-      }
-    }
-    return false;
+  deleteCourse(id: number | undefined): Observable<Course> {
+    return this._http.delete<Course>(`${this.baseApi}/courses/course/${id}`);
   }
 
-  getCategory(id: number | undefined) {
 
-    if (id != undefined) {
-      const category = CATEGORIES.find(c => c.id == id);
-      if (category != undefined)
-        return category;
-    }
-    return undefined;
+  getAllCategories(): Observable<Category[]> {
+    return this._http.get<Category[]>(`${this.baseApi}/categories`);
+  }
+
+  getCategory(id: number | undefined): Observable<Category> {
+    return this._http.get<Category>(`${this.baseApi}/categories/${id}`);
   }
 }

@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,9 +15,7 @@ export class LoginComponent {
   password: string | undefined;
   courseName: string | undefined;
 
-  constructor(private _activateRoute: ActivatedRoute, private _router: Router, private _service: UserService) {
-    console.log("login component");
-  }
+  constructor(private _activateRoute: ActivatedRoute, private _router: Router, private _service: UserService) { }
 
   ngOnInit() {
     this._activateRoute.url.subscribe(url =>
@@ -25,12 +23,20 @@ export class LoginComponent {
   }
 
   login() {
-    console.log(this.name, this.password, this.courseName);
-    if (this._service.login(this.name, this.password, this.courseName)) {
-      alert("you login succesfull");
-      this._router.navigate(['courses'])
-    }
-    else this.goToRegister();
+    this._service.login(this.name, this.password, this.courseName).subscribe(data => {
+      sessionStorage.setItem('user', data.id!.toString());
+      if (data.isLecturer && this.courseName != undefined)
+      sessionStorage.setItem('isLecturer', 'true');
+      else
+      sessionStorage.removeItem('isLecturer');
+      this._router.navigate(['courses']);
+      console.log("ser")
+    }, error => {
+      if (error.status == 401)
+        this._router.navigate(['/user/register']);
+      else
+        this._router.navigate(['/error']);
+    });
   }
 
   goToRegister() {

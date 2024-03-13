@@ -1,6 +1,38 @@
-.image{
-    max-width: 100px;
-}
+
 .close{
-    background-color: red;
+  background-color: #c2185b;
 }
+.course-details {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h4 {
+    margin-bottom: 10px;
+  }
+  
+  .image {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .syllabus-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .syllabus-item {
+    margin-bottom: 5px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }

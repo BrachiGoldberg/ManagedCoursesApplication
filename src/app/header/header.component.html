@@ -1,8 +1,33 @@
-<nav>
-    <div> <a routerLink="/user">to login component</a></div>
-    <div> <a routerLink="/user/register">register</a></div>
-    <div> <a routerLink="/user/logout">logout</a></div>
-    <div> <a routerLink="/courses">all coures</a></div>
-    <div> <a routerLink="/courses/add-course">add new course</a></div>
-    <div> <a routerLink="/user/lecturer-login">login to lecturer</a></div>
-</nav>
+<!-- <mat-toolbar color="primary">
+  <div class="container">
+    <div class="item" routerLink="/user">to login component</div>
+    <div class="item" routerLink="/user/register">register</div>
+    <div class="item" routerLink="/user/logout">logout</div>
+    <div class="item" routerLink="/courses">all courses</div>
+    <div class="item" routerLink="/courses/add-course">add new course</div>
+    <div class="item" routerLink="/user/lecturer-login">login to lecturer</div>
+  </div>
+</mat-toolbar> -->
+
+<mat-toolbar color="primary">
+  <div class="container">
+    <div class="item" routerLink="/user">
+      <mat-icon>person</mat-icon> Login
+    </div>
+    <div class="item" routerLink="/user/register">
+      <mat-icon>person_add</mat-icon> Register
+    </div>
+    <div class="item" routerLink="/courses">
+      <mat-icon>library_books</mat-icon> All Courses
+    </div>
+    <div class="item" routerLink="/courses/add-course">
+      <mat-icon>add_circle</mat-icon> Add New Course
+    </div>
+    <div class="item" routerLink="/user/lecturer-login">
+      <mat-icon>school</mat-icon> Login to Lecturer
+    </div>
+    <div class="item" routerLink="/user/logout">
+      <mat-icon>exit_to_app</mat-icon> Logout
+    </div>
+  </div>
+</mat-toolbar>

@@ -17,6 +17,5 @@ export class LogoutComponent {
 
   ngOnDestroy() {
     sessionStorage.clear();
-
   }
 }

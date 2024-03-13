@@ -1,0 +1,38 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .featured-courses {
+    margin-top: 30px;
+  }
+  
+  .course-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    text-align: left;
+  }
+  
+  .quick-links {
+    margin-top: 30px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 10px 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }

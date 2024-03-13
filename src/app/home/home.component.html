@@ -1,1 +1,18 @@
-<p>home works!</p>
+<div class="container">
+    <h1>Welcome to Our Managed Courses Website</h1>
+  
+    <div class="featured-courses">
+      <h2>Featured Courses</h2>
+      <div *ngFor="let course of categories" class="course-card">
+          <h3>{{ course.name }}</h3>
+      </div>
+    </div>
+  
+    <div class="quick-links">
+      <h2>Quick Links</h2>
+      <ul>
+        <li><a routerLink="/courses">All Courses</a></li>
+        <li><a routerLink="/user">Login</a></li>
+      </ul>
+    </div>
+  </div>

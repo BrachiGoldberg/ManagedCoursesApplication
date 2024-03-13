@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { COURSES, Course } from '../course.model';
+import { Course } from '../course.model';
 import { Router } from '@angular/router';
-import { USERS } from '../../user/user.model';
 import { CourseService } from '../course.service';
-import { CATEGORIES, Category } from '../category.model';
+import { Category } from '../category.model';
 
 @Component({
   selector: 'app-courses-list',
@@ -11,17 +10,19 @@ import { CATEGORIES, Category } from '../category.model';
   styleUrl: './courses-list.component.css'
 })
 export class CoursesListComponent {
-  courses: Course[] = COURSES;
-  coursesToDisplay: Course[] = COURSES;
+
+  courses!: Course[];
+  coursesToDisplay!: Course[];
   isLecturer: boolean = false;
   userId: number | undefined;
 
   nameFilter: string | undefined;
   categoryIdFilter: number | undefined;
   learningWayFilter: number | undefined;
-  categories: Category[] = CATEGORIES;
+  categories: Category[] | undefined;
 
   constructor(private _router: Router, private _service: CourseService) { }
+
   ngOnInit() {
     const isLecturer = sessionStorage.getItem('isLecturer');
     if (isLecturer != undefined && isLecturer == 'true')
@@ -29,31 +30,34 @@ export class CoursesListComponent {
     const userId = sessionStorage.getItem('user');
     if (userId != undefined)
       this.userId = +userId;
-    else this._router.navigate(['error'])
+    else this._router.navigate(['error']);
+    this.getAllCourses();
+    this._service.getAllCategories().subscribe(data => {
+      this.categories = data;
+    }, () => {
+      this._router.navigate(['error']);
+    })
   }
 
+  getAllCourses() {
+    this._service.getAllCourses().subscribe(data => {
+      this.courses = data;
+      this.coursesToDisplay = data;
+    }, () => {
+      this._router.navigate(['error']);
+    });
+  }
 
   addCourse() {
     this._router.navigate(['courses/add-course']);
   }
 
-  getLecturerName(lecturerId: number) {
-    let lecturer = USERS.filter(u => u.isLecturer && u.id == lecturerId);
-    if (lecturer.length > 0)
-      return lecturer[0].name;
-    this._router.navigate(['error']);
-    return null;
-  }
-
-  getLearningWay(way: number) {
-    return way == 0 ? 'Frontal' : 'Zoom';
-  }
-
   deleteCourse(id: number) {
-    if (this._service.deleteCourse(id)) {
-      alert("delete success");
-    }
-    else alert("error");
+    this._service.deleteCourse(id).subscribe(data => {
+      this.getAllCourses();
+    }, () => {
+      this._router.navigate(['error']);
+    });
   }
 
   updateCourse(id: number) {
@@ -65,21 +69,21 @@ export class CoursesListComponent {
   }
 
   filter() {
-    console.log(this.nameFilter, this.categoryIdFilter, this.learningWayFilter);
-    // debugger
     this.coursesToDisplay = this.courses.filter(c =>
-      this.categoryIdFilter == undefined || c.categoryId == +this.categoryIdFilter
-      &&
-      this.nameFilter == undefined || this.nameFilter == "" || c.name == this.nameFilter
-      &&
-      this.learningWayFilter == undefined || c.learningWay == +this.learningWayFilter!
+      this.learningWayFilter == undefined || c.learningWay == +this.learningWayFilter
     );
-    console.log(this.coursesToDisplay);
+    this.coursesToDisplay = this.coursesToDisplay.filter(c =>
+      this.categoryIdFilter == undefined || c.categoryId == +this.categoryIdFilter
+    );
+    this.coursesToDisplay = this.coursesToDisplay.filter(c =>
+      this.nameFilter == undefined || c.name?.toLowerCase().includes(this.nameFilter.toLowerCase())
+    );
   }
 
-  canelFilter() {
+  cancelFilter() {
     this.nameFilter = undefined;
     this.learningWayFilter = undefined;
     this.categoryIdFilter = undefined;
+    this.filter();
   }
 }

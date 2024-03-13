@@ -3,7 +3,11 @@ import { CourseService } from '../course.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Course, LearningWay } from '../course.model';
-import { CATEGORIES, Category } from '../category.model';
+import { Category } from '../category.model';
+import { DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
+import 'animate.css';
+
 
 @Component({
   selector: 'app-add-course',
@@ -13,47 +17,48 @@ import { CATEGORIES, Category } from '../category.model';
 export class AddCourseComponent {
 
   courseId: number | undefined;
-  course!: Course ;
-  categories: Category[] = CATEGORIES;
+  course: Course = new Course();
+  categories: Category[] | undefined;
   userId!: number;
-  courseForm!: FormGroup;
+  courseForm: FormGroup = this.createForm();
+
   constructor(private _serivice: CourseService, private _activate: ActivatedRoute,
-    private _fb: FormBuilder, private _router: Router) { }
+    private _fb: FormBuilder, private _router: Router, private datePipe: DatePipe) { }
 
   ngOnInit() {
     let userId = sessionStorage.getItem('user');
     if (userId != undefined)
       this.userId = +userId;
     else {
-      //error!!!
       this._router.navigate(['error']);
     }
     this._activate.params.subscribe(params => {
       const id = params['id'];
       if (id != undefined)
         this.courseId = id;
-
-    })
-    if (this.courseId != undefined) {
-      let myCourse = this._serivice.getCourseById(this.courseId);
-      this.course = myCourse!;
-    }
-    else {
-      this.course = new Course();
-      this.course.categoryId = 1;
-      this.course.learningWay = LearningWay.Frontal;
-    }
-    this.courseForm = this._fb.group({
-      "name": new FormControl(this.course.name, [Validators.required]),
-      "duration": new FormControl(this.course.duration, [Validators.required]),
-      "image": new FormControl(this.course.image, [Validators.required]),
-      "learningWay": new FormControl(this.course.learningWay?.toString(), [Validators.required]),
-      "startDate": new FormControl(this.course.startDate, [Validators.required]),
-      "categoryId": new FormControl(this.course.categoryId, [Validators.required]),
-      "syllabus": this._fb.array([])
     });
 
-    this.course.syllabus?.forEach(s => this.syllabusArray.push(this._fb.control(s)));
+    if (this.courseId != undefined) {
+      this._serivice.getCourseById(this.courseId).subscribe(data => {
+        this.course = data;
+        this.courseForm = this.createForm();
+        this.course?.syllabus?.forEach(s => this.syllabusArray.push(this._fb.control(s)));
+        console.log(this.courseForm.value)
+      }, error => {
+        this._router.navigate(['error']);
+      });
+    }
+    else {
+      this.course.categoryId = 1;
+      this.course.learningWay = LearningWay.Frontal;
+      this.course?.syllabus?.forEach(s => this.syllabusArray.push(this._fb.control(s)));
+    }
+
+    this._serivice.getAllCategories().subscribe(data => {
+      this.categories = data;
+    }, error => {
+      this._router.navigate(['error']);
+    })
   }
 
   get syllabusArray(): FormArray {
@@ -72,6 +77,18 @@ export class AddCourseComponent {
     this.syllabusArray.removeAt(index);
   }
 
+  createForm(): FormGroup {
+    return this._fb.group({
+      "name": new FormControl(this.course?.name, [Validators.required]),
+      "duration": new FormControl(this.course?.duration, [Validators.required]),
+      "image": new FormControl(this.course?.image, [Validators.required]),
+      "learningWay": new FormControl(this.course?.learningWay?.toString(), [Validators.required]),
+      "startDate": new FormControl(this.course?.startDate!, [Validators.required]),
+      "categoryId": new FormControl(this.course?.categoryId, [Validators.required]),
+      "syllabus": this._fb.array([])
+    });;
+  }
+
   checkIsFullField(index: number) {
     let syllsbusItem = this.getSyllabusControl(index);
     if (syllsbusItem.value != "")
@@ -82,31 +99,71 @@ export class AddCourseComponent {
   }
 
   submitForm() {
+    let status: string = "";
     if (this.courseForm.valid) {
-      console.log(this.syllabusArray)
       this.syllabusArray.controls.forEach((c, i) => {
         if (c.value == "")
           this.removeSyllabus(i);
       });
-
       this.course = {
-        ...this.courseForm.value, lecturerId: this.userId,
-        learningWay: +this.courseForm.value.learningWay, duration: +this.courseForm.value.duration
+        ...this.courseForm.value, lecturerId: this.userId, id: this.courseId,
+        learningWay: +this.courseForm.value.learningWay, duration: +this.courseForm.value.duration, categoryId: +this.courseForm.value.categoryId
       };
-      console.log(this.course);
       if (this.courseId == undefined) {//new course
-        this._serivice.addNewCourse(this.course);
+        this._serivice.addNewCourse(this.course).subscribe(data => {
+          this.saveSuccess("Add");
+        }, error => {
+          this._router.navigate(['error']);
+        });
       }
       else {
-        this._serivice.updateCourse(this.courseId, this.course);
+        this._serivice.updateCourse(this.courseId, this.course).subscribe(data => {
+          this.saveSuccess("Update");
+        }, error => {
+          this._router.navigate(['error']);
+        });
       }
-      this._router.navigate(['courses/all-courses']);
+
+
     }
-    else alert("you have missing fields");
+    else Swal.fire({ text: "You have missing fields", icon: "info", });
+
   }
 
-  cancel(){
-    alert("your details aren't saved, Do you sure?");
-    this._router.navigate(['courses']);
+  saveSuccess(status: string) {
+    Swal.fire({
+      title: `You ${status!} your course successfully`,
+      showClass: {
+        popup: `
+          animate__animated
+          animate__fadeInUp
+          animate__faster
+        `
+      },
+      hideClass: {
+        popup: `
+          animate__animated
+          animate__fadeOutDown
+          animate__faster
+        `
+      }
+    }).then(() =>
+      this._router.navigate(['courses/all-courses'])
+    );
   }
+
+  cancel() {
+    Swal.fire({
+      title: "Are you sure not save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: `Oops. I want to return back`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._router.navigate(['courses']);
+      }
+    });
+  }
+
 }

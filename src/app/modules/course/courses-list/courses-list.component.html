@@ -1,4 +1,4 @@
-<form #filterForm="ngForm">
+<!-- <form #filterForm="ngForm">
     <div id="firstFilter">
         <label for="name">Filter by name {{nameFilter}}</label>
         <input id="name" type="text" [(ngModel)]="nameFilter" name="name" (input)="filter()" />
@@ -19,29 +19,64 @@
             (click)="filter()" />Zoom
     </div>
     <button (click)="canelFilter()">Cancel</button>
+</form> -->
+
+
+<form #filterForm="ngForm" class="filter-form">
+    
+
+    <div class="filter-group">
+        <label for="name">Filter by name: {{ nameFilter }}</label>
+        <input id="name" type="text" [(ngModel)]="nameFilter" name="name" (input)="filter()" />
+    </div>
+
+    <div class="filter-group">
+        <label for="category">Filter by category:</label>
+        <select id="category" [(ngModel)]="categoryIdFilter" name="category" (change)="filter()">
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Filter by learning way:</label>
+        <div>
+            <input id="learningWayFrontal" type="radio" value="0" [(ngModel)]="learningWayFilter" name="learningWay"
+                (click)="filter()" />
+            <label for="learningWayFrontal">Frontal</label>
+
+            <input id="learningWayZoom" type="radio" value="1" [(ngModel)]="learningWayFilter" name="learningWay"
+                (click)="filter()" />
+            <label for="learningWayZoom">Zoom</label>
+        </div>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="cancelFilter()">Cancel</button>
 </form>
 
 
-<div>
-    @for(course of coursesToDisplay; track $index){
-    <!-- <app-course-details [course]="course"></app-course-details> -->
-    <div>
-        <div>
-            <img src="{{course.image}}" class="image" />
-        </div>
-        <h3>{{course.name}} by {{getLecturerName(course.lecturerId!)}}</h3>
-        <div>{{getLearningWay(course.learningWay!)}}</div>
-        <div>Duration Course is {{course.duration}} lessons</div>
-        @if(isLecturer && course.lecturerId == userId){
-        <div>
-            <button (click)="updateCourse(course.id!)">Update</button>
-            <button (click)="deleteCourse(course.id!)">Delete</button>
-        </div>}
-        <button (click)="showDetails(course.id!)">for more details</button>
-    </div>
-    }
 
-    @if(isLecturer){
-    <button (click)="addCourse()">Add new course</button>
-    }
+
+<div class="course-list">
+    @for(course of coursesToDisplay; track $index){<div class="course-item">
+        <div>
+            <img [src]="course.image" class="course-image" />
+        </div>
+        <h3>{{ course.name }}</h3>
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="{{ course.learningWay! | showLearningWayIcon }}"></mat-icon>
+        <div>{{course.learningWay! | learningWayString}}</div>
+        <div>Duration: {{ course.duration }} lessons</div>
+
+        @if(course.lecturerId == userId){<div>
+            <div class="action-buttons">
+                <button mat-raised-button color="primary" (click)="updateCourse(course.id!)">Update</button>
+                <button mat-raised-button color="warn" (click)="deleteCourse(course.id!)">Delete</button>
+            </div>
+        </div>}
+
+        <button  mat-raised-button (click)="showDetails(course.id!)">For more details</button>
+    </div>}
+
+    @if(isLecturer){<div class="add-course-button">
+        <button mat-raised-button color="accent" (click)="addCourse()">Add new course</button>
+    </div>}
 </div>

@@ -1,32 +1,23 @@
 import { Injectable } from '@angular/core';
-import { USERS, User } from './user.model';
-import { log } from 'console';
+import { User } from './user.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  users: User[] = USERS;
-  constructor() { }
 
-  login(name: string | undefined, password: string | undefined, course: string | undefined) {
-    if (name != undefined || password != undefined) {
-      const myUser = this.users.filter(u => u.name == name && u.password == password);
-      console.log("myUser",  myUser[0].id!.toString());
-      if (myUser.length > 0) {
-        sessionStorage.setItem('user', myUser[0].id!.toString());
-        sessionStorage.setItem('user', myUser[0].id!.toString());
-        if (myUser[0].isLecturer && course != undefined)
-          sessionStorage.setItem('isLecturer', 'true');
-        return true;
-      }
-    }
-    return false;
+  baseApi: string = 'https://localhost:7218';
+
+  constructor(private _http: HttpClient) { }
+
+
+  login(name: string | undefined, password: string | undefined, course: string | undefined): Observable<User> {
+    return this._http.post<User>(`${this.baseApi}/user/login`, { name: name, password: password });
   }
 
-  register(user: User) {
-    console.log("servie user", user);
-    USERS.push({ ...user, id: 6 });
-    return this.login(user.name, user.password, undefined);
+  register(user: User): Observable<User> {
+    return this._http.post<User>(`${this.baseApi}/user/register`, user);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from '../user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
@@ -23,11 +23,12 @@ export class RegisterComponent {
   }
 
   register() {
-    console.log("register function", this.user);
-    if (this._service.register(this.user)) {
-      alert("you register succesfull");
-      this._router.navigate(['courses']);
-    }
-    else alert("error acourde, please try again");
+    this._service.register(this.user).subscribe(data => {
+      sessionStorage.setItem('user', data.id!.toString());
+      sessionStorage.removeItem('isLecturer');
+      this._router.navigate(['/courses']);
+    }, () => {
+      this._router.navigate(['/error']);
+    })
   }
 }

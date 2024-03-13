@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthLecturerService implements CanActivate {
 
   canActivate(): boolean {
-    const lecturer = localStorage.getItem('isLecturer');
+    const lecturer = sessionStorage.getItem('isLecturer');
     if (lecturer == undefined)
       return false;
     return true;

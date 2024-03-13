@@ -1,3 +1,44 @@
-.image{
+/* .image{
     max-width: 100px;
-}
+} */
+
+
+
+.course-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .course-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 15px;
+    width: 300px;
+    text-align: center;
+  
+    .course-image {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+  
+    .action-buttons {
+      margin-top: 10px;
+  
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+  
+  .filter-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  
+    .filter-group {
+      margin-right: 20px;
+    }
+  }
